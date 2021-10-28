@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "532727205464",
+    "project_id": "myticket-aaef6",
+    "storage_bucket": "myticket-aaef6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:532727205464:android:26d9d5fa8976d85b0c442d",
+        "android_client_info": {
+          "package_name": "com.helloworld"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "532727205464-67stb5egf8bbm9bkt254c9g8gncgs9bs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyANv4PU_PBMVUXHS79H37bR-FCYCDND4Tw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "532727205464-67stb5egf8bbm9bkt254c9g8gncgs9bs.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
