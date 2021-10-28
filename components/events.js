@@ -17,16 +17,16 @@ export default function Events(props) {
     const subscriber = firestore()
       .collection('events')
       .onSnapshot(querySnapshot => {
-        const events = [];
+        const eventsNew = [];
 
         querySnapshot.forEach(documentSnapshot => {
-          events.push({
+          eventsNew.push({
             ...documentSnapshot.data(),
             key: documentSnapshot.id,
           });
         });
 
-        setEvents(events);
+        setEvents(eventsNew);
         setLoading(false);
       });
 
@@ -48,7 +48,7 @@ export default function Events(props) {
             activeOpacity={0.6}
             underlayColor="#DDDDDD"
             style={styles.itemStyle}>
-            <View >
+            <View>
               <Text style={styles.itemTextStyle}>{item.name}</Text>
             </View>
           </TouchableHighlight>
