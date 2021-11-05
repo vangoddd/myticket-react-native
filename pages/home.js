@@ -19,6 +19,7 @@ export default function Home({navigation}) {
           <Text style={styles.signOutText}>Sign Out</Text>
         </TouchableOpacity>
       </View>
+      <Text>{auth().currentUser.displayName}</Text>
       <Events nav={navigation} />
     </View>
   );
@@ -59,7 +60,7 @@ const styles = StyleSheet.create({
     padding: 15,
   },
   signOut: {
-    backgroundColor: '#DDD',
+    backgroundColor: '#2DC441',
     alignSelf: 'center',
     padding: 10,
     flex: 1,
@@ -68,5 +69,6 @@ const styles = StyleSheet.create({
   signOutText: {
     textAlign: 'center',
     textAlignVertical: 'center',
+    color: 'white',
   },
 });

@@ -3,19 +3,34 @@ import {View, Text, StyleSheet} from 'react-native';
 import {TextInput, TouchableOpacity} from 'react-native';
 import KeyboardAvoidingView from 'react-native/Libraries/Components/Keyboard/KeyboardAvoidingView';
 import auth from '@react-native-firebase/auth';
+import {useValidation} from 'react-native-form-validator';
 
 export default function Login({route, navigation, nav}) {
   const [email, setEmail] = useState('');
   const [pass, setPass] = useState('');
 
+  const {validate, getErrorMessages, isFormValid} = useValidation({
+    state: {email, pass},
+  });
+
   const handleLogin = () => {
-    auth()
-      .signInWithEmailAndPassword(email, pass)
-      .then(userCredentials => {
-        const user = userCredentials.user;
-        console.log(user.email);
+    if (
+      validate({
+        email: {email: true, required: true},
+        pass: {minlength: 3, required: true},
       })
-      .catch(error => alert(error.message));
+    ) {
+      console.log(email);
+      auth()
+        .signInWithEmailAndPassword(email, pass)
+        .then(userCredentials => {
+          const user = userCredentials.user;
+          console.log(user.email);
+        })
+        .catch(error => alert(error.message));
+    } else {
+      console.log('validation failed');
+    }
   };
 
   const handleRegister = () => {
@@ -42,11 +57,17 @@ export default function Login({route, navigation, nav}) {
           style={styles.input}
         />
       </View>
+
+      {!isFormValid() ? (
+        <View>
+          <Text style={styles.errorMsg}>{getErrorMessages()}</Text>
+        </View>
+      ) : null}
+
       <View style={styles.buttonContainer}>
         <TouchableOpacity
           onPress={() => {
             handleLogin();
-            console.log('clicked login');
           }}
           style={styles.button}>
           <Text style={styles.buttonText}>Login</Text>
@@ -67,6 +88,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 36,
     paddingVertical: 30,
+    fontFamily: 'Montserrat-Medium',
   },
   container: {
     flex: 1,
@@ -90,7 +112,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   button: {
-    backgroundColor: '#4697F0',
+    backgroundColor: '#2DC441',
     width: '100%',
     padding: 15,
     borderRadius: 10,
@@ -98,7 +120,7 @@ const styles = StyleSheet.create({
   },
   buttonOutline: {
     backgroundColor: 'white',
-    borderColor: '#4697F0',
+    borderColor: '#2DC441',
     borderWidth: 2,
   },
   buttonText: {
@@ -106,7 +128,11 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   buttonOutlineText: {
-    color: '#4697F0',
+    color: '#2DC441',
     alignSelf: 'center',
+  },
+  errorMsg: {
+    paddingTop: 15,
+    color: 'red',
   },
 });
