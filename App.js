@@ -9,6 +9,7 @@ import EventDetails from './pages/eventdetails';
 import Home from './pages/home';
 import Login from './pages/auth/login';
 import Register from './pages/auth/register';
+import Regevent from './pages/regevent';
 
 const App = () => {
   const Stack = createStackNavigator();
@@ -57,7 +58,8 @@ const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name="Home" component={Home} />
+        {/* <Stack.Screen name="Home" component={Home} /> */}
+        <Stack.Screen name="Regevent" component={Regevent} />
         <Stack.Screen
           name="EventDetails"
           component={EventDetails}
