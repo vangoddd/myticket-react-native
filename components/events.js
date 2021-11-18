@@ -5,6 +5,8 @@ import {
   StyleSheet,
   ActivityIndicator,
   FlatList,
+  Image,
+  ImageBackground,
 } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import {TouchableHighlight} from 'react-native-gesture-handler';
@@ -41,6 +43,8 @@ export default function Events(props) {
   return (
     <FlatList
       data={events}
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={{paddingBottom: 10}}
       renderItem={({item}) => (
         <View style={styles.container}>
           <TouchableHighlight
@@ -49,7 +53,12 @@ export default function Events(props) {
             underlayColor="#DDDDDD"
             style={styles.itemStyle}>
             <View>
-              <Text style={styles.itemTextStyle}>{item.name}</Text>
+              <ImageBackground
+                style={styles.imageStyle}
+                imageStyle={{borderRadius: 10}}
+                source={{uri: item.image}}>
+                <Text style={styles.itemTextStyle}>{item.name}</Text>
+              </ImageBackground>
             </View>
           </TouchableHighlight>
         </View>
@@ -64,16 +73,23 @@ const styles = StyleSheet.create({
     padding: 15,
   },
   itemStyle: {
-    backgroundColor: '#BBB',
+    borderRadius: 10,
   },
   itemTextStyle: {
     fontSize: 20,
-    padding: 10,
+    color: 'white',
+    alignSelf: 'flex-start',
+    textShadowColor: '#000000',
+    textShadowRadius: 10,
+    padding: 15,
   },
   container: {
-    flex: 1,
-    justifyContent: 'center',
     paddingHorizontal: 15,
     paddingVertical: 5,
+  },
+  imageStyle: {
+    width: '100%',
+    height: 100,
+    borderRadius: 10,
   },
 });

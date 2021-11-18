@@ -1,16 +1,32 @@
-import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {View, Text, StyleSheet, Image, ScrollView} from 'react-native';
+
+import storage from '@react-native-firebase/storage';
 
 export default function EventDetails({route, navigation}) {
   const item = route.params;
+
   return (
-    <View style={styles.itemStyle}>
-      <Text style={styles.header}>{item.name}</Text>
-      <Text style={styles.textStyle}>Lokasi : {item.location}</Text>
-      <Text style={styles.textStyle}>
-        Tiket Tersedia : {item.available_ticket}
-      </Text>
-    </View>
+    <ScrollView>
+      <View style={styles.itemStyle}>
+        <Text style={styles.header}>{item.name}</Text>
+        <Image
+          style={{
+            width: '100%',
+            height: 200,
+            borderRadius: 20,
+            marginVertical: 10,
+          }}
+          source={{uri: item.image}}
+        />
+        <Text style={styles.textStyle}>{item.description}</Text>
+        <Text style={styles.textStyle}>Lokasi : {item.location}</Text>
+        <Text style={styles.textStyle}>
+          Tiket Tersedia : {item.available_ticket}
+        </Text>
+        <Text style={styles.textStyle}>Harga {item.price}</Text>
+      </View>
+    </ScrollView>
   );
 }
 

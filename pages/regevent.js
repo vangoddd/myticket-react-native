@@ -1,10 +1,23 @@
 import React, {useState} from 'react';
-import {View, Text, StyleSheet, Alert, ScrollView, Button} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Alert,
+  ScrollView,
+  Button,
+  Image,
+} from 'react-native';
 import {TouchableOpacity} from 'react-native';
 import {TextInput} from 'react-native';
 
 import firestore from '@react-native-firebase/firestore';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
+
+import {launchImageLibrary} from 'react-native-image-picker';
+import storage from '@react-native-firebase/storage';
+
+import auth from '@react-native-firebase/auth';
 
 export default function Regevent({navigation}) {
   const [eventName, setEventName] = useState('');
@@ -19,6 +32,8 @@ export default function Regevent({navigation}) {
   const [dateStart, setDateStart] = useState(null);
   const [dateEnd, setDateEnd] = useState(null);
 
+  const [photo, setPhoto] = useState(null);
+
   const onPriceChange = text => {
     setPrice(text.replace(/[^0-9]/g, ''));
   };
@@ -28,6 +43,7 @@ export default function Regevent({navigation}) {
       {
         text: 'Cancel',
         onPress: () => {
+          console.log(photo);
           console.log('cancel');
         },
         style: 'cancel',
@@ -43,22 +59,34 @@ export default function Regevent({navigation}) {
   };
 
   const submitEvent = () => {
-    firestore()
-      .collection('events')
-      .add({
-        name: eventName,
-        location: location,
-        price: price,
-        description: eventDes,
-        available_ticket: avlTickets,
-        verified: 0,
-        createdAt: firestore.Timestamp.now(),
-        startTime: dateStart,
-        endTime: dateEnd,
-      })
-      .then(() => {
-        console.log('event added');
-      });
+    saveImageToCloud().then(imgUrl => {
+      console.log('Image url :');
+      console.log(imgUrl);
+      firestore()
+        .collection('events')
+        .add({
+          name: eventName,
+          location: location,
+          price: price,
+          description: eventDes,
+          available_ticket: avlTickets,
+          verified: 0,
+          createdAt: firestore.Timestamp.now(),
+          startTime: dateStart,
+          endTime: dateEnd,
+          image: imgUrl,
+          owner: auth().currentUser.uid,
+        })
+        .then(() => {
+          Alert.alert('Success', 'Event successfully submitted', [
+            {
+              text: 'Ok',
+              onPress: () => console.log('ok bro'),
+            },
+          ]);
+          console.log('event added');
+        });
+    });
   };
 
   const showStartPicker = () => {
@@ -84,25 +112,71 @@ export default function Regevent({navigation}) {
     hidePicker();
   };
 
+  const photoPickerCallback = o => {
+    if (!o.didCancel) {
+      setPhoto(o);
+      console.log(photo);
+    }
+  };
+
+  const openPhotoPicker = () => {
+    launchImageLibrary(
+      {mediaType: 'photo', includeBase64: false},
+      photoPickerCallback,
+    );
+  };
+
+  const saveImageToCloud = async () => {
+    const reference = storage().ref('eventImage/' + photo.assets[0].fileName);
+    await reference.putFile(photo.assets[0].uri).catch(error => {
+      throw error;
+    });
+    const url = await reference.getDownloadURL().catch(error => {
+      throw error;
+    });
+    return url;
+  };
+
+  const SelectPhoto = () => {
+    if (photo == null) {
+      return <Text>Select a photo</Text>;
+    } else {
+      return (
+        <View>
+          <Image
+            style={styles.imageStyle}
+            source={{
+              uri: photo.assets[0].uri,
+            }}
+          />
+        </View>
+      );
+    }
+  };
+
   return (
     <View style={styles.container}>
       <ScrollView>
         <View style={styles.formContainer}>
+          <Text>Event Name</Text>
           <TextInput
             placeholder="Event name"
             onChangeText={text => setEventName(text)}
             style={styles.form}
           />
+          <Text>Event Description</Text>
           <TextInput
             placeholder="Event Description"
             onChangeText={text => setEventDes(text)}
             style={styles.form}
           />
+          <Text>Location</Text>
           <TextInput
             placeholder="Location"
             onChangeText={text => setLocation(text)}
             style={styles.form}
           />
+          <Text>Price</Text>
           <TextInput
             placeholder="Price"
             keyboardType="number-pad"
@@ -110,6 +184,7 @@ export default function Regevent({navigation}) {
             style={styles.form}
             value={price}
           />
+          <Text>Available Tickets</Text>
           <TextInput
             placeholder="Available tickets"
             keyboardType="number-pad"
@@ -157,15 +232,15 @@ export default function Regevent({navigation}) {
             onCancel={hidePicker}
             minimumDate={dateStart}
           />
-          {/* Submit button */}
+          {/* Add photo */}
+          <Text>Add photo</Text>
+          <TouchableOpacity onPress={openPhotoPicker}>
+            <SelectPhoto />
+          </TouchableOpacity>
         </View>
+        {/* Submit button */}
         <TouchableOpacity
           onPress={() => {
-            console.log(price);
-            console.log(avlTickets);
-            console.log(location);
-            console.log(eventDes);
-            console.log(eventName);
             confirmationAlert();
           }}>
           <View style={styles.button}>
@@ -198,7 +273,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#2DC441',
     padding: 15,
     borderRadius: 5,
-    marginBottom: 5,
+    marginBottom: 20,
     marginHorizontal: 25,
   },
   buttonText: {
@@ -211,5 +286,11 @@ const styles = StyleSheet.create({
   dateTextView: {
     color: 'black',
     padding: 5,
+  },
+  imageStyle: {
+    width: '100%',
+    height: 100,
+    borderRadius: 5,
+    marginTop: 10,
   },
 });

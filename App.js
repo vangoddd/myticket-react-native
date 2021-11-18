@@ -58,7 +58,7 @@ const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        {/* <Stack.Screen name="Home" component={Home} /> */}
+        <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="Regevent" component={Regevent} />
         <Stack.Screen
           name="EventDetails"

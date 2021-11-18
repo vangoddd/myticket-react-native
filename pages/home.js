@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, FlatList, SafeAreaView} from 'react-native';
 import {TouchableOpacity} from 'react-native';
 import Events from '../components/events';
 import auth from '@react-native-firebase/auth';
@@ -10,7 +10,7 @@ export default function Home({navigation}) {
   };
 
   return (
-    <View>
+    <SafeAreaView style={{flex: 1}}>
       <View style={styles.headerContainer}>
         <Text style={styles.textStyle}>MyTicket</Text>
         <TouchableOpacity
@@ -19,9 +19,12 @@ export default function Home({navigation}) {
           <Text style={styles.signOutText}>Sign Out</Text>
         </TouchableOpacity>
       </View>
+      <TouchableOpacity onPress={() => navigation.navigate('Regevent')}>
+        <Text style={{padding: 15, fontSize: 20}}>Add event</Text>
+      </TouchableOpacity>
       <Text>{auth().currentUser.displayName}</Text>
       <Events nav={navigation} />
-    </View>
+    </SafeAreaView>
   );
 }
 
