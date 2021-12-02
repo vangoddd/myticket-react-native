@@ -44,9 +44,11 @@ export default function EventDetails({route, navigation}) {
 
         <View style={styles.cardContainer}>
           <Text style={styles.cardTitle}>Date & Time</Text>
+          <Text style={styles.textBold}>Start</Text>
           <Text style={styles.textStyle}>
             {timeStampToString(item.startTime)}
           </Text>
+          <Text style={styles.textBold}>End</Text>
           <Text style={styles.textStyle}>
             {timeStampToString(item.endTime)}
           </Text>
@@ -105,5 +107,10 @@ const styles = StyleSheet.create({
   headerContainer: {
     backgroundColor: 'white',
     width: '100%',
+  },
+  textBold: {
+    fontSize: 15,
+    padding: 5,
+    fontWeight: 'bold',
   },
 });
