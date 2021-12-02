@@ -1,8 +1,6 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import {View, Text, StyleSheet, Image, ScrollView} from 'react-native';
 var currencyFormatter = require('currency-formatter');
-
-import firestore from '@react-native-firebase/firestore';
 
 const convertToRupiah = price => {
   return currencyFormatter.format(price, {

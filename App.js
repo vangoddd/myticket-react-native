@@ -19,8 +19,8 @@ const App = () => {
   const [user, setUser] = useState();
 
   // Handle user state changes
-  const onAuthStateChanged = user => {
-    setUser(user);
+  const onAuthStateChanged = userAuth => {
+    setUser(userAuth);
     if (initializing) {
       setInitializing(false);
     }
@@ -29,9 +29,12 @@ const App = () => {
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
     return subscriber; // unsubscribe on unmount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (initializing) return null;
+  if (initializing) {
+    return null;
+  }
 
   if (!user) {
     return (

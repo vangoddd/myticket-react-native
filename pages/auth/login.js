@@ -27,7 +27,7 @@ export default function Login({route, navigation, nav}) {
           const user = userCredentials.user;
           console.log(user.email);
         })
-        .catch(error => alert(error.message));
+        .catch(error => console.log(error));
     } else {
       console.log('validation failed');
     }

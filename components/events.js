@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, {useState, useEffect} from 'react';
 import {
   View,
@@ -5,7 +6,6 @@ import {
   StyleSheet,
   ActivityIndicator,
   FlatList,
-  Image,
   ImageBackground,
 } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
@@ -40,7 +40,6 @@ export default function Events(props) {
           setLoading(false);
         }
       });
-    console.log(notFound);
   }, []);
 
   if (loading) {
