@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {View, Text, StyleSheet, Image, ScrollView} from 'react-native';
 var currencyFormatter = require('currency-formatter');
 
-import storage from '@react-native-firebase/storage';
+import firestore from '@react-native-firebase/firestore';
 
 const convertToRupiah = price => {
   return currencyFormatter.format(price, {
@@ -12,6 +12,11 @@ const convertToRupiah = price => {
     precision: 0,
     format: '%s%v', // %s is the symbol and %v is the value
   });
+};
+
+const timeStampToString = timeStamp => {
+  var dateObj = timeStamp.toDate();
+  return dateObj.toString();
 };
 
 export default function EventDetails({route, navigation}) {
@@ -38,9 +43,20 @@ export default function EventDetails({route, navigation}) {
         </View>
 
         <View style={styles.cardContainer}>
+          <Text style={styles.cardTitle}>Date & Time</Text>
+          <Text style={styles.textStyle}>
+            {timeStampToString(item.startTime)}
+          </Text>
+          <Text style={styles.textStyle}>
+            {timeStampToString(item.endTime)}
+          </Text>
+        </View>
+
+        <View style={styles.cardContainer}>
           <Text style={styles.cardTitle}>Available Ticket</Text>
           <Text style={styles.textStyle}>{item.available_ticket}</Text>
         </View>
+
         <View style={styles.cardContainer}>
           <Text style={styles.cardTitle}>Price</Text>
           <Text style={styles.textStyle}>
