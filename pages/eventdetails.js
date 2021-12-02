@@ -1,15 +1,17 @@
 import React, {useState, useEffect} from 'react';
 import {View, Text, StyleSheet, Image, ScrollView} from 'react-native';
-import 'intl';
+var currencyFormatter = require('currency-formatter');
 
 import storage from '@react-native-firebase/storage';
 
 const convertToRupiah = price => {
-  // return new Intl.NumberFormat('en', {
-  //   style: 'currency',
-  //   currency: 'IDR',
-  // }).format(price);
-  return price;
+  return currencyFormatter.format(price, {
+    symbol: 'Rp.',
+    decimal: ',',
+    thousand: '.',
+    precision: 0,
+    format: '%s%v', // %s is the symbol and %v is the value
+  });
 };
 
 export default function EventDetails({route, navigation}) {
@@ -41,7 +43,9 @@ export default function EventDetails({route, navigation}) {
         </View>
         <View style={styles.cardContainer}>
           <Text style={styles.cardTitle}>Price</Text>
-          <Text style={styles.textStyle}>{convertToRupiah(item.price)}</Text>
+          <Text style={styles.textStyle}>
+            {convertToRupiah(item.price)} / Ticket
+          </Text>
         </View>
       </View>
     </ScrollView>
