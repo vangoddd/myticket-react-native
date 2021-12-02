@@ -20,7 +20,7 @@ export default function Events(props) {
     firestore()
       .collection('events')
       .where('verified', '==', 1)
-      // .orderBy('startTime', 'asc')
+      .orderBy('startTime', 'asc')
       .get()
       .then(querySnapshot => {
         if (querySnapshot.size === 0) {

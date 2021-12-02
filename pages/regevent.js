@@ -5,8 +5,9 @@ import {
   StyleSheet,
   Alert,
   ScrollView,
-  Button,
+  Modal,
   Image,
+  ActivityIndicator,
 } from 'react-native';
 import {TouchableOpacity} from 'react-native';
 import {TextInput} from 'react-native';
@@ -34,6 +35,8 @@ export default function Regevent({navigation}) {
 
   const [photo, setPhoto] = useState(null);
 
+  const [uploading, setUploading] = useState(false);
+
   const onPriceChange = text => {
     setPrice(text.replace(/[^0-9]/g, ''));
   };
@@ -59,6 +62,7 @@ export default function Regevent({navigation}) {
   };
 
   const submitEvent = () => {
+    setUploading(true);
     saveImageToCloud().then(imgUrl => {
       console.log('Image url :');
       console.log(imgUrl);
@@ -78,10 +82,11 @@ export default function Regevent({navigation}) {
           owner: auth().currentUser.uid,
         })
         .then(() => {
+          setUploading(false);
           Alert.alert('Success', 'Event successfully submitted', [
             {
               text: 'Ok',
-              onPress: () => console.log('ok bro'),
+              onPress: () => navigation.pop(),
             },
           ]);
           console.log('event added');
@@ -156,6 +161,14 @@ export default function Regevent({navigation}) {
 
   return (
     <View style={styles.container}>
+      <Modal animationType="slide" transparent={true} visible={uploading}>
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>Uploading</Text>
+            <ActivityIndicator />
+          </View>
+        </View>
+      </Modal>
       <ScrollView>
         <View style={styles.formContainer}>
           <Text>Event Name</Text>
@@ -292,5 +305,30 @@ const styles = StyleSheet.create({
     height: 100,
     borderRadius: 5,
     marginTop: 10,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 5,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
   },
 });

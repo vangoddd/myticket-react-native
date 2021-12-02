@@ -3,7 +3,6 @@ import {View, Text, StyleSheet, FlatList, SafeAreaView} from 'react-native';
 import {TouchableOpacity} from 'react-native';
 import Events from '../components/events';
 import auth from '@react-native-firebase/auth';
-
 export default function Home({navigation}) {
   const handleSignOut = () => {
     auth().signOut();
