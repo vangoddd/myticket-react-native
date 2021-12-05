@@ -74,7 +74,7 @@ export default function Regevent({navigation}) {
           price: price,
           description: eventDes,
           available_ticket: avlTickets,
-          verified: 0,
+          verified: 1,
           createdAt: firestore.Timestamp.now(),
           startTime: dateStart,
           endTime: dateEnd,
