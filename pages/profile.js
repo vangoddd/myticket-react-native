@@ -12,20 +12,43 @@ export default function Home({navigation}) {
       <View style={styles.picture}>
         {/* <Image style={styles.imageStyle}></Image> */}
       </View>
-      <View style={styles.titleContainer}>
-        <Text style={styles.titleText}>Name</Text>
+      <View style={styles.cardContainer}>
+        <Text style={styles.cardTitle}>Name</Text>
+        <Text style={styles.textStyle}>{auth().currentUser.displayName}</Text>
       </View>
-      <View style={styles.contentContainer}>
-        <Text style={styles.contnetText}>{auth().currentUser.displayName}</Text>
-      </View>
-      <View style={styles.titleContainer}>
-        <Text style={styles.titleText}>Email</Text>
-      </View>
-      <View style={styles.contentContainer}>
-        <Text style={styles.contnetText}>vachri.attala@gmail.com</Text>
+      <View style={styles.cardContainer}>
+        <Text style={styles.cardTitle}>Email</Text>
+        <Text style={styles.textStyle}>vachri.attala@gmail.com</Text>
       </View>
     </SafeAreaView>
   );
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  header: {
+    fontFamily: 'Montserrat-Medium',
+    fontSize: 30,
+    margin: 20,
+    color: '#444',
+    textAlign: 'center',
+  },
+  textStyle: {
+    fontSize: 15,
+    padding: 5,
+  },
+  cardContainer: {
+    width: '100%',
+    backgroundColor: 'white',
+    marginBottom: 10,
+    padding: 15,
+  },
+  cardTitle: {
+    color: '#444',
+    fontSize: 20,
+    fontFamily: 'Montserrat-Medium',
+    paddingHorizontal: 5,
+  },
+  imageStyle: {
+    borderRadius: '50%',
+  },
+});
