@@ -13,11 +13,6 @@ export default function Home({navigation}) {
     <SafeAreaView style={{flex: 1}}>
       <View style={styles.headerContainer}>
         <Text style={styles.textStyle}>MyTicket</Text>
-        <TouchableOpacity
-          style={styles.signOut}
-          onPress={() => handleSignOut()}>
-          <Text style={styles.signOutText}>Sign Out</Text>
-        </TouchableOpacity>
       </View>
       <TouchableOpacity onPress={() => navigation.navigate('Regevent')}>
         <Text style={{padding: 15, fontSize: 20}}>Add event</Text>
@@ -61,17 +56,5 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     padding: 15,
-  },
-  signOut: {
-    backgroundColor: '#2DC441',
-    alignSelf: 'center',
-    padding: 10,
-    flex: 1,
-    borderRadius: 7,
-  },
-  signOutText: {
-    textAlign: 'center',
-    textAlignVertical: 'center',
-    color: 'white',
   },
 });

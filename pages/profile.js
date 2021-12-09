@@ -1,17 +1,25 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import {View, Text, StyleSheet, SafeAreaView} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  SafeAreaView,
+  TouchableOpacity,
+} from 'react-native';
 import auth from '@react-native-firebase/auth';
 
-export default function Home({navigation}) {
+export default function Profile({navigation}) {
+  const handleSignOut = () => {
+    auth().signOut();
+  };
+
   return (
     <SafeAreaView style={{flex: 1}}>
       <View style={styles.header}>
         <Text>Profile</Text>
       </View>
-      <View style={styles.picture}>
-        {/* <Image style={styles.imageStyle}></Image> */}
-      </View>
+      <View>{/* <Image style={styles.imageStyle}></Image> */}</View>
       <View style={styles.cardContainer}>
         <Text style={styles.cardTitle}>Name</Text>
         <Text style={styles.textStyle}>{auth().currentUser.displayName}</Text>
@@ -20,6 +28,9 @@ export default function Home({navigation}) {
         <Text style={styles.cardTitle}>Email</Text>
         <Text style={styles.textStyle}>vachri.attala@gmail.com</Text>
       </View>
+      <TouchableOpacity style={styles.signOut} onPress={() => handleSignOut()}>
+        <Text style={styles.signOutText}>Sign Out</Text>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 }
@@ -50,5 +61,17 @@ const styles = StyleSheet.create({
   },
   imageStyle: {
     borderRadius: '50%',
+  },
+  signOut: {
+    backgroundColor: '#2DC441',
+    alignSelf: 'center',
+    padding: 10,
+    flex: 1,
+    borderRadius: 7,
+  },
+  signOutText: {
+    textAlign: 'center',
+    textAlignVertical: 'center',
+    color: 'white',
   },
 });
