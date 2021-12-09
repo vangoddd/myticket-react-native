@@ -6,6 +6,7 @@ import {
   StyleSheet,
   SafeAreaView,
   TouchableOpacity,
+  Image,
 } from 'react-native';
 import auth from '@react-native-firebase/auth';
 
@@ -16,10 +17,15 @@ export default function Profile({navigation}) {
 
   return (
     <SafeAreaView style={{flex: 1}}>
-      <View style={styles.header}>
-        <Text>Profile</Text>
+      {/* <View style={styles.header}>
+        <Text style={styles.header}>Profile</Text>
+      </View> */}
+      <View style={styles.imageContainer}>
+        <Image
+          style={styles.imageStyle}
+          source={require('../assets/images/profile_placeholder.png')}
+        />
       </View>
-      <View>{/* <Image style={styles.imageStyle}></Image> */}</View>
       <View style={styles.cardContainer}>
         <Text style={styles.cardTitle}>Name</Text>
         <Text style={styles.textStyle}>{auth().currentUser.displayName}</Text>
@@ -28,9 +34,13 @@ export default function Profile({navigation}) {
         <Text style={styles.cardTitle}>Email</Text>
         <Text style={styles.textStyle}>vachri.attala@gmail.com</Text>
       </View>
-      <TouchableOpacity style={styles.signOut} onPress={() => handleSignOut()}>
-        <Text style={styles.signOutText}>Sign Out</Text>
-      </TouchableOpacity>
+      <View style={styles.signOutContainer}>
+        <TouchableOpacity
+          style={styles.signOut}
+          onPress={() => handleSignOut()}>
+          <Text style={styles.signOutText}>Sign Out</Text>
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 }
@@ -39,7 +49,7 @@ const styles = StyleSheet.create({
   header: {
     fontFamily: 'Montserrat-Medium',
     fontSize: 30,
-    margin: 20,
+    margin: 10,
     color: '#444',
     textAlign: 'center',
   },
@@ -60,18 +70,29 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
   },
   imageStyle: {
-    borderRadius: '50%',
+    width: 200,
+    height: 200,
+    borderRadius: 100,
+  },
+  imageContainer: {
+    alignSelf: 'center',
+    paddingVertical: 20,
   },
   signOut: {
     backgroundColor: '#2DC441',
     alignSelf: 'center',
     padding: 10,
-    flex: 1,
+    width: '100%',
+    marginHorizontal: 10,
     borderRadius: 7,
   },
   signOutText: {
     textAlign: 'center',
     textAlignVertical: 'center',
     color: 'white',
+    fontSize: 20,
+  },
+  signOutContainer: {
+    paddingHorizontal: 15,
   },
 });

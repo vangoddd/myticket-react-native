@@ -11,12 +11,8 @@ import Login from './pages/auth/login';
 import Register from './pages/auth/register';
 import Regevent from './pages/regevent';
 
-import {createDrawerNavigator} from '@react-navigation/drawer';
-import Profile from './pages/profile';
-
 const App = () => {
   const Stack = createStackNavigator();
-  const Drawer = createDrawerNavigator();
 
   // Set an initializing state whilst Firebase connects
   const [initializing, setInitializing] = useState(true);
@@ -79,11 +75,11 @@ const App = () => {
           }}
         />
       </Stack.Navigator>
-      <Drawer.Navigator initialRouteName="Home">
+      {/* <Drawer.Navigator initialRouteName="Home">
         <Drawer.Screen name="Home" component={Home} />
         <Drawer.Screen name="Notifications" component={EventDetails} />
         <Drawer.Screen name="Profile" component={Profile} />
-      </Drawer.Navigator>
+      </Drawer.Navigator> */}
     </NavigationContainer>
   );
 };

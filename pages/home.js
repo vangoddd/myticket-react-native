@@ -4,22 +4,43 @@ import {View, Text, StyleSheet, SafeAreaView} from 'react-native';
 import {TouchableOpacity} from 'react-native';
 import Events from '../components/events';
 import auth from '@react-native-firebase/auth';
-export default function Home({navigation}) {
-  const handleSignOut = () => {
-    auth().signOut();
-  };
 
+import {createDrawerNavigator} from '@react-navigation/drawer';
+import Profile from './profile';
+import Regevent from './regevent';
+
+function HomeComponent({navigation}) {
   return (
     <SafeAreaView style={{flex: 1}}>
       <View style={styles.headerContainer}>
         <Text style={styles.textStyle}>MyTicket</Text>
       </View>
-      <TouchableOpacity onPress={() => navigation.navigate('Regevent')}>
+      <Text style={styles.subHeader}>Latest events</Text>
+      {/* <TouchableOpacity onPress={() => navigation.navigate('Regevent')}>
         <Text style={{padding: 15, fontSize: 20}}>Add event</Text>
-      </TouchableOpacity>
-      <Text>{auth().currentUser.displayName}</Text>
+      </TouchableOpacity> */}
+      {/* Event list */}
       <Events nav={navigation} />
     </SafeAreaView>
+  );
+}
+
+export default function Home({navigation}) {
+  const Drawer = createDrawerNavigator();
+  return (
+    <Drawer.Navigator>
+      <Drawer.Screen
+        name="HomeDrawer"
+        component={HomeComponent}
+        options={{headerShown: false, drawerLabel: 'Home'}}
+      />
+      <Drawer.Screen name="Profile" component={Profile} />
+      <Drawer.Screen
+        name="RegDrawer"
+        component={Regevent}
+        options={{drawerLabel: 'Register Event', title: 'Register Event'}}
+      />
+    </Drawer.Navigator>
   );
 }
 
@@ -55,6 +76,11 @@ const styles = StyleSheet.create({
   headerContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    padding: 15,
+  },
+  subHeader: {
+    fontSize: 20,
+    fontFamily: 'ReadexPro-Medium',
     padding: 15,
   },
 });

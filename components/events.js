@@ -91,7 +91,9 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
     textShadowColor: '#000000',
     textShadowRadius: 10,
-    padding: 15,
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    fontFamily: 'ReadexPro-Light',
   },
   container: {
     paddingHorizontal: 15,
