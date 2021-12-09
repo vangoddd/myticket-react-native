@@ -16,6 +16,7 @@ import Profile from './profile';
 import Regevent from './regevent';
 
 import firestore from '@react-native-firebase/firestore';
+import Wishlist from './wishlist';
 
 const handleSignOut = () => {
   auth().signOut();
@@ -44,7 +45,11 @@ export default function Home({navigation, route, admin}) {
       <Drawer.Screen name="Profile">
         {props => <Profile {...props} admin={admin} />}
       </Drawer.Screen>
-
+      {!admin ? (
+        <Drawer.Screen name="Wishlist">
+          {props => <Wishlist {...props} admin={admin} />}
+        </Drawer.Screen>
+      ) : null}
       {admin ? (
         <Drawer.Screen
           name="RegDrawer"
@@ -85,7 +90,7 @@ function HomeComponent({navigation, route, admin}) {
       <Text style={styles.subHeader}>Latest events</Text>
 
       {/* Event list */}
-      <Events nav={navigation} admin={admin} />
+      <Events nav={navigation} admin={admin} wishlist={false} />
     </SafeAreaView>
   );
 }

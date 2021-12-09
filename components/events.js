@@ -9,6 +9,7 @@ import {
   ImageBackground,
 } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
 import {TouchableHighlight} from 'react-native-gesture-handler';
 
 export default function Events(props) {
@@ -17,34 +18,80 @@ export default function Events(props) {
   const [notFound, setNotFound] = useState(false);
 
   const getEvent = () => {
-    firestore()
-      .collection('events')
-      // .where('verified', '==', 1)
-      .orderBy('startTime', 'asc')
-      .get()
-      .then(querySnapshot => {
-        if (querySnapshot.size === 0) {
-          setNotFound(true);
-          setLoading(false);
-        } else {
-          const eventsNew = [];
+    if (props.wishlist) {
+      //get user wishlist
+      firestore()
+        .collection('users')
+        .doc(auth().currentUser.uid)
+        .get()
+        .then(documentSnapshot => {
+          if (documentSnapshot.exists) {
+            const userWish = documentSnapshot.data().wishlist;
+            if (userWish.length > 0) {
+              firestore()
+                .collection('events')
+                .where(firestore.FieldPath.documentId(), 'in', userWish)
+                .get()
+                .then(querySnapshot => {
+                  if (querySnapshot.size === 0) {
+                    setNotFound(true);
+                    setLoading(false);
+                  } else {
+                    const eventsNew = [];
 
-          querySnapshot.forEach(documentSnapshot => {
-            eventsNew.push({
-              ...documentSnapshot.data(),
-              key: documentSnapshot.id,
+                    querySnapshot.forEach(documentSnapshotWish => {
+                      eventsNew.push({
+                        ...documentSnapshotWish.data(),
+                        key: documentSnapshotWish.id,
+                      });
+                    });
+                    setNotFound(false);
+                    setEvents(eventsNew);
+                    setLoading(false);
+                  }
+                })
+                .catch(e => console.log(e));
+            } else {
+              setNotFound(true);
+              setLoading(false);
+            }
+          }
+        })
+        .catch(e => console.log(e));
+    } else {
+      firestore()
+        .collection('events')
+        // .where('verified', '==', 1)
+        .orderBy('startTime', 'asc')
+        .get()
+        .then(querySnapshot => {
+          if (querySnapshot.size === 0) {
+            setNotFound(true);
+            setLoading(false);
+          } else {
+            const eventsNew = [];
+
+            querySnapshot.forEach(documentSnapshot => {
+              eventsNew.push({
+                ...documentSnapshot.data(),
+                key: documentSnapshot.id,
+              });
             });
-          });
-          setNotFound(false);
-          setEvents(eventsNew);
-          setLoading(false);
-        }
-      })
-      .catch(e => console.log(e));
+            setNotFound(false);
+            setEvents(eventsNew);
+            setLoading(false);
+          }
+        })
+        .catch(e => console.log(e));
+    }
   };
 
   useEffect(() => {
-    getEvent();
+    const unsubscribe = props.nav.addListener('focus', () => {
+      getEvent();
+    });
+
+    return unsubscribe;
   }, []);
 
   if (loading) {
