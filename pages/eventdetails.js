@@ -19,13 +19,14 @@ const timeStampToString = timeStamp => {
 
 export default function EventDetails({route, navigation}) {
   const item = route.params;
+  navigation.setOptions({title: item.name});
 
   return (
     <ScrollView>
       <View style={styles.itemStyle}>
-        <View style={styles.headerContainer}>
+        {/* <View style={styles.headerContainer}>
           <Text style={styles.header}>{item.name}</Text>
-        </View>
+        </View> */}
 
         <Image style={styles.imageStyle} source={{uri: item.image}} />
 

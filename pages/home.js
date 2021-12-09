@@ -1,9 +1,10 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import {View, Text, StyleSheet, SafeAreaView} from 'react-native';
+import {View, Text, StyleSheet, SafeAreaView, Button} from 'react-native';
 import {TouchableOpacity} from 'react-native';
 import Events from '../components/events';
 import auth from '@react-native-firebase/auth';
+import {Icon} from 'react-native-elements';
 
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import Profile from './profile';
@@ -13,8 +14,23 @@ function HomeComponent({navigation}) {
   return (
     <SafeAreaView style={{flex: 1}}>
       <View style={styles.headerContainer}>
+        <View style={styles.icon}>
+          <TouchableOpacity onPress={() => navigation.openDrawer()}>
+            <Icon name="bars" type="font-awesome" color="#444" size={30} />
+          </TouchableOpacity>
+        </View>
         <Text style={styles.textStyle}>MyTicket</Text>
       </View>
+
+      <View
+        style={{
+          borderBottomColor: '#DDD',
+          borderBottomWidth: 2,
+          marginHorizontal: 15,
+          paddingTop: 7,
+        }}
+      />
+
       <Text style={styles.subHeader}>Latest events</Text>
       {/* <TouchableOpacity onPress={() => navigation.navigate('Regevent')}>
         <Text style={{padding: 15, fontSize: 20}}>Add event</Text>
@@ -38,7 +54,10 @@ export default function Home({navigation}) {
       <Drawer.Screen
         name="RegDrawer"
         component={Regevent}
-        options={{drawerLabel: 'Register Event', title: 'Register Event'}}
+        options={{
+          drawerLabel: 'Register Event',
+          title: 'Register Event',
+        }}
       />
     </Drawer.Navigator>
   );
@@ -62,9 +81,11 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   textStyle: {
-    fontSize: 50,
+    fontSize: 40,
     padding: 0,
-    flex: 3,
+    flex: 6,
+    fontFamily: 'ReadexPro-Light',
+    color: '#555',
   },
   itemStyle: {
     flex: 1,
@@ -75,12 +96,19 @@ const styles = StyleSheet.create({
   },
   headerContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-around',
     padding: 15,
+    paddingBottom: 0,
+    alignItems: 'center',
   },
   subHeader: {
-    fontSize: 20,
+    fontSize: 25,
     fontFamily: 'ReadexPro-Medium',
     padding: 15,
+  },
+  icon: {
+    alignItems: 'flex-start',
+    flex: 1,
+    paddingLeft: 10,
   },
 });
