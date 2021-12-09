@@ -63,7 +63,9 @@ export default function Events(props) {
         renderItem={({item}) => (
           <View style={styles.container}>
             <TouchableHighlight
-              onPress={() => props.nav.push('EventDetails', item)}
+              onPress={() =>
+                props.nav.push('EventDetails', {admin: props.admin, item: item})
+              }
               activeOpacity={0.6}
               underlayColor="#DDDDDD"
               style={styles.itemStyle}>

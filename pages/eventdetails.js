@@ -1,6 +1,16 @@
-import React from 'react';
-import {View, Text, StyleSheet, Image, ScrollView} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native';
 var currencyFormatter = require('currency-formatter');
+
+import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
 
 const convertToRupiah = price => {
   return currencyFormatter.format(price, {
@@ -18,8 +28,44 @@ const timeStampToString = timeStamp => {
 };
 
 export default function EventDetails({route, navigation}) {
-  const item = route.params;
+  const item = route.params.item;
   navigation.setOptions({title: item.name});
+
+  const [onWishlist, setOnWishlist] = useState(false);
+
+  useEffect(() => {
+    //check wishlist on user tan;e
+    firestore()
+      .collection('users')
+      .doc(auth().currentUser.uid)
+      .get()
+      .then(documentSnapshot => {
+        if (documentSnapshot.exists) {
+          const userWish = documentSnapshot.data().wishlist;
+          if (userWish.includes(item.key)) {
+            setOnWishlist(true);
+          } else {
+            setOnWishlist(false);
+          }
+        }
+      });
+  }, [onWishlist]);
+
+  const addToWishlist = id => {
+    firestore()
+      .collection('users')
+      .doc(auth().currentUser.uid)
+      .update({wishlist: firestore.FieldValue.arrayUnion(id)});
+    setOnWishlist(true);
+  };
+
+  const removeFromWishlist = id => {
+    firestore()
+      .collection('users')
+      .doc(auth().currentUser.uid)
+      .update({wishlist: firestore.FieldValue.arrayRemove(id)});
+    setOnWishlist(false);
+  };
 
   return (
     <ScrollView>
@@ -64,6 +110,25 @@ export default function EventDetails({route, navigation}) {
             {convertToRupiah(item.price)} / Ticket
           </Text>
         </View>
+
+        {/* idk bt this */}
+        {!onWishlist && !route.params.admin ? (
+          <View style={styles.wishlistContainer}>
+            <TouchableOpacity
+              style={styles.wishList}
+              onPress={() => addToWishlist(item.key)}>
+              <Text style={styles.wishlistText}>Add to Wishlist</Text>
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <View style={styles.wishlistContainer}>
+            <TouchableOpacity
+              style={styles.wishListRemove}
+              onPress={() => removeFromWishlist(item.key)}>
+              <Text style={styles.wishlistText}>Remove from wishlist</Text>
+            </TouchableOpacity>
+          </View>
+        )}
       </View>
     </ScrollView>
   );
@@ -111,5 +176,32 @@ const styles = StyleSheet.create({
     fontSize: 15,
     padding: 5,
     fontWeight: 'bold',
+  },
+  wishList: {
+    backgroundColor: '#2DC441',
+    alignSelf: 'center',
+    padding: 10,
+    width: '100%',
+    marginHorizontal: 10,
+    borderRadius: 7,
+  },
+  wishListRemove: {
+    backgroundColor: '#FF0000',
+    alignSelf: 'center',
+    padding: 10,
+    width: '100%',
+    marginHorizontal: 10,
+    borderRadius: 7,
+  },
+  wishlistText: {
+    textAlign: 'center',
+    textAlignVertical: 'center',
+    color: 'white',
+    fontSize: 20,
+  },
+  wishlistContainer: {
+    paddingHorizontal: 15,
+    paddingBottom: 15,
+    width: '100%',
   },
 });

@@ -11,26 +11,30 @@ import {
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 
-export default function Profile({navigation}) {
-  const [isAdmin, setIsAdmin] = useState(false);
+export default function Profile({navigation, admin}) {
+  // const [isAdmin, setIsAdmin] = useState(false);
 
-  useEffect(() => {
-    firestore()
-      .collection('users')
-      .doc(auth().currentUser.uid)
-      .get()
-      .then(user => {
-        console.log(user);
-        console.log(user.data().role);
-        if (user.data().role === 'admin') {
-          setIsAdmin(true);
-        }
-      });
-  }, []);
+  // useEffect(() => {
+  //   firestore()
+  //     .collection('users')
+  //     .doc(auth().currentUser.uid)
+  //     .get()
+  //     .then(user => {
+  //       console.log(user);
+  //       console.log(user.data().role);
+  //       if (user.data().role === 'admin') {
+  //         setIsAdmin(true);
+  //       }
+  //     });
+  // }, []);
 
   const handleSignOut = () => {
     auth().signOut();
   };
+
+  if (!auth().currentUser) {
+    return null;
+  }
 
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -52,7 +56,7 @@ export default function Profile({navigation}) {
         <Text style={styles.textStyle}>{auth().currentUser.email}</Text>
       </View>
 
-      {isAdmin ? (
+      {admin ? (
         <View style={styles.cardContainer}>
           <Text style={styles.cardTitle}>Role</Text>
           <Text style={styles.textStyle}>Admin</Text>

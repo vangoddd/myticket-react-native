@@ -41,16 +41,20 @@ export default function Home({navigation, route, admin}) {
         options={{headerShown: false, drawerLabel: 'Home'}}>
         {props => <HomeComponent {...props} admin={admin} />}
       </Drawer.Screen>
-      <Drawer.Screen name="Profile" component={Profile} />
+      <Drawer.Screen name="Profile">
+        {props => <Profile {...props} admin={admin} />}
+      </Drawer.Screen>
 
-      <Drawer.Screen
-        name="RegDrawer"
-        component={Regevent}
-        options={{
-          drawerLabel: 'Register Event',
-          title: 'Register Event',
-        }}
-      />
+      {admin ? (
+        <Drawer.Screen
+          name="RegDrawer"
+          component={Regevent}
+          options={{
+            drawerLabel: 'Register Event',
+            title: 'Register Event',
+          }}
+        />
+      ) : null}
     </Drawer.Navigator>
   );
 }
@@ -76,12 +80,12 @@ function HomeComponent({navigation, route, admin}) {
         }}
       />
 
-      <Text>{admin ? 'Pog' : 'sadge'}</Text>
+      {/* <Text>{admin ? 'Pog' : 'sadge'}</Text> */}
 
       <Text style={styles.subHeader}>Latest events</Text>
 
       {/* Event list */}
-      <Events nav={navigation} />
+      <Events nav={navigation} admin={admin} />
     </SafeAreaView>
   );
 }

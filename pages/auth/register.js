@@ -39,6 +39,7 @@ export default function Register({route, navigation}) {
             role: 'user',
             uuid: userCred.user.uid,
             name: name,
+            wishlist: [],
           });
         });
     }
