@@ -74,7 +74,6 @@ export default function Regevent({navigation}) {
           price: price,
           description: eventDes,
           available_ticket: avlTickets,
-          verified: 1,
           createdAt: firestore.Timestamp.now(),
           startTime: dateStart,
           endTime: dateEnd,
@@ -86,7 +85,7 @@ export default function Regevent({navigation}) {
           Alert.alert('Success', 'Event successfully submitted', [
             {
               text: 'Ok',
-              onPress: () => navigation.pop(),
+              onPress: () => navigation.navigate('HomeDrawer'),
             },
           ]);
           console.log('event added');

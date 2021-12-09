@@ -10,6 +10,8 @@ import {
 import {useValidation} from 'react-native-form-validator';
 import auth from '@react-native-firebase/auth';
 
+import firestore from '@react-native-firebase/firestore';
+
 export default function Register({route, navigation}) {
   const [email, setEmail] = useState('');
   const [pass, setPass] = useState('');
@@ -26,13 +28,18 @@ export default function Register({route, navigation}) {
         name: {required: true},
         email: {email: true, required: true},
         pass: {minlength: 8, required: true},
-        confirmPass: {equalPassword: pass},
+        confirmPass: {equalPassword: pass, required: true},
       })
     ) {
       auth()
         .createUserWithEmailAndPassword(email, pass)
         .then(userCred => {
           userCred.user.updateProfile({displayName: name});
+          firestore().collection('users').doc(userCred.user.uid).set({
+            role: 'user',
+            uuid: userCred.user.uid,
+            name: name,
+          });
         });
     }
   };

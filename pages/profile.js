@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -9,8 +9,25 @@ import {
   Image,
 } from 'react-native';
 import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 
 export default function Profile({navigation}) {
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    firestore()
+      .collection('users')
+      .doc(auth().currentUser.uid)
+      .get()
+      .then(user => {
+        console.log(user);
+        console.log(user.data().role);
+        if (user.data().role === 'admin') {
+          setIsAdmin(true);
+        }
+      });
+  }, []);
+
   const handleSignOut = () => {
     auth().signOut();
   };
@@ -32,8 +49,16 @@ export default function Profile({navigation}) {
       </View>
       <View style={styles.cardContainer}>
         <Text style={styles.cardTitle}>Email</Text>
-        <Text style={styles.textStyle}>vachri.attala@gmail.com</Text>
+        <Text style={styles.textStyle}>{auth().currentUser.email}</Text>
       </View>
+
+      {isAdmin ? (
+        <View style={styles.cardContainer}>
+          <Text style={styles.cardTitle}>Role</Text>
+          <Text style={styles.textStyle}>Admin</Text>
+        </View>
+      ) : null}
+
       <View style={styles.signOutContainer}>
         <TouchableOpacity
           style={styles.signOut}

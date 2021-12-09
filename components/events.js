@@ -16,10 +16,10 @@ export default function Events(props) {
   const [events, setEvents] = useState([]); // Initial empty array of users
   const [notFound, setNotFound] = useState(false);
 
-  useEffect(() => {
+  const getEvent = () => {
     firestore()
       .collection('events')
-      .where('verified', '==', 1)
+      // .where('verified', '==', 1)
       .orderBy('startTime', 'asc')
       .get()
       .then(querySnapshot => {
@@ -40,6 +40,10 @@ export default function Events(props) {
           setLoading(false);
         }
       });
+  };
+
+  useEffect(() => {
+    getEvent();
   }, []);
 
   if (loading) {
@@ -52,6 +56,8 @@ export default function Events(props) {
     return (
       <FlatList
         data={events}
+        onRefresh={() => getEvent()}
+        refreshing={loading}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{paddingBottom: 10}}
         renderItem={({item}) => (

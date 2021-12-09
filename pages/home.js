@@ -1,16 +1,61 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet, SafeAreaView, Button} from 'react-native';
 import {TouchableOpacity} from 'react-native';
 import Events from '../components/events';
 import auth from '@react-native-firebase/auth';
 import {Icon} from 'react-native-elements';
+import {
+  DrawerContentScrollView,
+  DrawerItemList,
+  DrawerItem,
+} from '@react-navigation/drawer';
 
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import Profile from './profile';
 import Regevent from './regevent';
 
-function HomeComponent({navigation}) {
+import firestore from '@react-native-firebase/firestore';
+
+const handleSignOut = () => {
+  auth().signOut();
+};
+
+function CustomDrawerContent(props) {
+  return (
+    <DrawerContentScrollView {...props}>
+      <DrawerItemList {...props} />
+      <DrawerItem label="Logout" onPress={() => handleSignOut()} />
+    </DrawerContentScrollView>
+  );
+}
+
+export default function Home({navigation, route, admin}) {
+  const Drawer = createDrawerNavigator();
+
+  return (
+    <Drawer.Navigator
+      drawerContent={props => <CustomDrawerContent {...props} />}>
+      <Drawer.Screen
+        name="HomeDrawer"
+        options={{headerShown: false, drawerLabel: 'Home'}}>
+        {props => <HomeComponent {...props} admin={admin} />}
+      </Drawer.Screen>
+      <Drawer.Screen name="Profile" component={Profile} />
+
+      <Drawer.Screen
+        name="RegDrawer"
+        component={Regevent}
+        options={{
+          drawerLabel: 'Register Event',
+          title: 'Register Event',
+        }}
+      />
+    </Drawer.Navigator>
+  );
+}
+
+function HomeComponent({navigation, route, admin}) {
   return (
     <SafeAreaView style={{flex: 1}}>
       <View style={styles.headerContainer}>
@@ -31,35 +76,13 @@ function HomeComponent({navigation}) {
         }}
       />
 
+      <Text>{admin ? 'Pog' : 'sadge'}</Text>
+
       <Text style={styles.subHeader}>Latest events</Text>
-      {/* <TouchableOpacity onPress={() => navigation.navigate('Regevent')}>
-        <Text style={{padding: 15, fontSize: 20}}>Add event</Text>
-      </TouchableOpacity> */}
+
       {/* Event list */}
       <Events nav={navigation} />
     </SafeAreaView>
-  );
-}
-
-export default function Home({navigation}) {
-  const Drawer = createDrawerNavigator();
-  return (
-    <Drawer.Navigator>
-      <Drawer.Screen
-        name="HomeDrawer"
-        component={HomeComponent}
-        options={{headerShown: false, drawerLabel: 'Home'}}
-      />
-      <Drawer.Screen name="Profile" component={Profile} />
-      <Drawer.Screen
-        name="RegDrawer"
-        component={Regevent}
-        options={{
-          drawerLabel: 'Register Event',
-          title: 'Register Event',
-        }}
-      />
-    </Drawer.Navigator>
   );
 }
 
