@@ -76,17 +76,7 @@ function HomeComponent({navigation, route, admin}) {
         <Text style={styles.textStyle}>MyTicket</Text>
       </View>
 
-      <View
-        style={{
-          borderBottomColor: '#DDD',
-          borderBottomWidth: 2,
-          marginHorizontal: 15,
-          paddingTop: 7,
-        }}
-      />
-
-      {/* <Text>{admin ? 'Pog' : 'sadge'}</Text> */}
-
+      <View style={styles.sep} />
       <Text style={styles.subHeader}>Latest events</Text>
 
       {/* Event list */}
@@ -132,6 +122,7 @@ const styles = StyleSheet.create({
     padding: 15,
     paddingBottom: 0,
     alignItems: 'center',
+    zIndex: 15,
   },
   subHeader: {
     fontSize: 25,
@@ -142,5 +133,11 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     flex: 1,
     paddingLeft: 10,
+  },
+  sep: {
+    borderBottomColor: '#DDD',
+    borderBottomWidth: 2,
+    marginHorizontal: 15,
+    paddingTop: 7,
   },
 });

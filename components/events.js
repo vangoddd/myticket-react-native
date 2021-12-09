@@ -99,7 +99,11 @@ export default function Events(props) {
   }
 
   if (notFound) {
-    return <Text style={styles.notFoundText}>No event found</Text>;
+    if (props.wishlist) {
+      return <Text style={styles.notFoundText}>Wishlist Empty.</Text>;
+    } else {
+      return <Text style={styles.notFoundText}>No event found</Text>;
+    }
   } else {
     return (
       <FlatList
