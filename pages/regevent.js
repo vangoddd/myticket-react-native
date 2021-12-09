@@ -42,7 +42,7 @@ export default function Regevent({navigation}) {
   };
 
   const confirmationAlert = () => {
-    Alert.alert('Konfirmasi', 'Apakah anda yakin data yang anda isi benar?', [
+    Alert.alert('Confirm', 'Are you sure the data is correct?', [
       {
         text: 'Cancel',
         onPress: () => {

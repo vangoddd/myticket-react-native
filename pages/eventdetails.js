@@ -6,6 +6,7 @@ import {
   Image,
   ScrollView,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 var currencyFormatter = require('currency-formatter');
 
@@ -52,6 +53,22 @@ export default function EventDetails({route, navigation}) {
       .catch(e => console.log(e));
   }, [onWishlist]);
 
+  const confirmationAlert = () => {
+    Alert.alert('Delete', 'Are you sure you want to delete this event?', [
+      {
+        text: 'Cancel',
+        onPress: () => {},
+        style: 'cancel',
+      },
+      {
+        text: 'Submit',
+        onPress: () => {
+          handleDeleteEvent();
+        },
+      },
+    ]);
+  };
+
   const addToWishlist = id => {
     firestore()
       .collection('users')
@@ -69,7 +86,18 @@ export default function EventDetails({route, navigation}) {
   };
 
   const handleDeleteEvent = () => {
-    console.log('Deleting Event ' + route.params.item.key);
+    firestore()
+      .collection('events')
+      .doc(route.params.item.key)
+      .delete()
+      .then(() => {
+        Alert.alert('Success', 'Event successfully deleted', [
+          {
+            text: 'Ok',
+            onPress: () => navigation.navigate('HomeDrawer'),
+          },
+        ]);
+      });
   };
 
   const WishlistButton = () => {
@@ -78,7 +106,7 @@ export default function EventDetails({route, navigation}) {
         <View style={styles.wishlistContainer}>
           <TouchableOpacity
             style={styles.wishListRemove}
-            onPress={() => handleDeleteEvent()}>
+            onPress={() => confirmationAlert()}>
             <Text style={styles.wishlistText}>Delete event</Text>
           </TouchableOpacity>
         </View>
