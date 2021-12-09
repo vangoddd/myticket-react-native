@@ -48,7 +48,8 @@ export default function EventDetails({route, navigation}) {
             setOnWishlist(false);
           }
         }
-      });
+      })
+      .catch(e => console.log(e));
   }, [onWishlist]);
 
   const addToWishlist = id => {
@@ -65,6 +66,45 @@ export default function EventDetails({route, navigation}) {
       .doc(auth().currentUser.uid)
       .update({wishlist: firestore.FieldValue.arrayRemove(id)});
     setOnWishlist(false);
+  };
+
+  const handleDeleteEvent = () => {
+    console.log('Deleting Event ' + route.params.item.key);
+  };
+
+  const WishlistButton = () => {
+    if (route.params.admin) {
+      return (
+        <View style={styles.wishlistContainer}>
+          <TouchableOpacity
+            style={styles.wishListRemove}
+            onPress={() => handleDeleteEvent()}>
+            <Text style={styles.wishlistText}>Delete event</Text>
+          </TouchableOpacity>
+        </View>
+      );
+    }
+    if (!onWishlist) {
+      return (
+        <View style={styles.wishlistContainer}>
+          <TouchableOpacity
+            style={styles.wishList}
+            onPress={() => addToWishlist(item.key)}>
+            <Text style={styles.wishlistText}>Add to Wishlist</Text>
+          </TouchableOpacity>
+        </View>
+      );
+    } else {
+      return (
+        <View style={styles.wishlistContainer}>
+          <TouchableOpacity
+            style={styles.wishListRemove}
+            onPress={() => removeFromWishlist(item.key)}>
+            <Text style={styles.wishlistText}>Remove from wishlist</Text>
+          </TouchableOpacity>
+        </View>
+      );
+    }
   };
 
   return (
@@ -112,7 +152,8 @@ export default function EventDetails({route, navigation}) {
         </View>
 
         {/* idk bt this */}
-        {!onWishlist && !route.params.admin ? (
+        <WishlistButton />
+        {/* {!onWishlist && !route.params.admin ? (
           <View style={styles.wishlistContainer}>
             <TouchableOpacity
               style={styles.wishList}
@@ -128,7 +169,7 @@ export default function EventDetails({route, navigation}) {
               <Text style={styles.wishlistText}>Remove from wishlist</Text>
             </TouchableOpacity>
           </View>
-        )}
+        )} */}
       </View>
     </ScrollView>
   );

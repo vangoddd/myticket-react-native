@@ -39,7 +39,8 @@ export default function Events(props) {
           setEvents(eventsNew);
           setLoading(false);
         }
-      });
+      })
+      .catch(e => console.log(e));
   };
 
   useEffect(() => {
