@@ -51,6 +51,7 @@ export default function EventDetails({route, navigation}) {
         }
       })
       .catch(e => console.log(e));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [onWishlist]);
 
   const confirmationAlert = () => {

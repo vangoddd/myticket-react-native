@@ -1,15 +1,12 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import {View, Text, StyleSheet, SafeAreaView} from 'react-native';
-import {TouchableOpacity} from 'react-native';
+import {View, StyleSheet, SafeAreaView} from 'react-native';
 import Events from '../components/events';
-import auth from '@react-native-firebase/auth';
-import {Icon} from 'react-native-elements';
 
 export default function Wishlist({navigation, route, admin}) {
   return (
     <SafeAreaView style={{flex: 1}}>
-      <View style={styles.padding}></View>
+      <View style={styles.padding} />
       {/* Event list */}
       <Events nav={navigation} admin={admin} wishlist={true} />
     </SafeAreaView>

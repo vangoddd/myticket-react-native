@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, SafeAreaView, Button} from 'react-native';
+import React from 'react';
+import {View, Text, StyleSheet, SafeAreaView} from 'react-native';
 import {TouchableOpacity} from 'react-native';
 import Events from '../components/events';
 import auth from '@react-native-firebase/auth';
@@ -15,7 +15,6 @@ import {createDrawerNavigator} from '@react-navigation/drawer';
 import Profile from './profile';
 import Regevent from './regevent';
 
-import firestore from '@react-native-firebase/firestore';
 import Wishlist from './wishlist';
 
 const handleSignOut = () => {

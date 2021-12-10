@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import {
   View,
   Text,
@@ -9,25 +9,8 @@ import {
   Image,
 } from 'react-native';
 import auth from '@react-native-firebase/auth';
-import firestore from '@react-native-firebase/firestore';
 
 export default function Profile({navigation, admin}) {
-  // const [isAdmin, setIsAdmin] = useState(false);
-
-  // useEffect(() => {
-  //   firestore()
-  //     .collection('users')
-  //     .doc(auth().currentUser.uid)
-  //     .get()
-  //     .then(user => {
-  //       console.log(user);
-  //       console.log(user.data().role);
-  //       if (user.data().role === 'admin') {
-  //         setIsAdmin(true);
-  //       }
-  //     });
-  // }, []);
-
   const handleSignOut = () => {
     auth().signOut();
   };
