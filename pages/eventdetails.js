@@ -7,6 +7,7 @@ import {
   ScrollView,
   TouchableOpacity,
   Alert,
+  TextInput,
 } from 'react-native';
 var currencyFormatter = require('currency-formatter');
 
@@ -33,6 +34,7 @@ export default function EventDetails({route, navigation}) {
   navigation.setOptions({title: item.name});
 
   const [onWishlist, setOnWishlist] = useState(false);
+  const [qty, setQty] = useState(0);
 
   useEffect(() => {
     //check wishlist on user tan;e
@@ -42,8 +44,9 @@ export default function EventDetails({route, navigation}) {
       .get()
       .then(documentSnapshot => {
         if (documentSnapshot.exists) {
-          const userWish = documentSnapshot.data().wishlist;
+          const userWish = Object.keys(documentSnapshot.data().wishlist);
           if (userWish.includes(item.key)) {
+            setQty(documentSnapshot.data().wishlist[item.key][0]);
             setOnWishlist(true);
           } else {
             setOnWishlist(false);
@@ -70,11 +73,15 @@ export default function EventDetails({route, navigation}) {
     ]);
   };
 
-  const addToWishlist = id => {
+  const addToWishlist = (id, amt) => {
+    var newAmt = amt;
+    if (amt === 0) {
+      newAmt = 1;
+    }
     firestore()
       .collection('users')
       .doc(auth().currentUser.uid)
-      .update({wishlist: firestore.FieldValue.arrayUnion(id)});
+      .update({['wishlist.' + id]: firestore.FieldValue.arrayUnion(newAmt)});
     setOnWishlist(true);
   };
 
@@ -82,8 +89,9 @@ export default function EventDetails({route, navigation}) {
     firestore()
       .collection('users')
       .doc(auth().currentUser.uid)
-      .update({wishlist: firestore.FieldValue.arrayRemove(id)});
+      .update({['wishlist.' + id]: firestore.FieldValue.delete()});
     setOnWishlist(false);
+    setQty(0);
   };
 
   const handleDeleteEvent = () => {
@@ -118,7 +126,7 @@ export default function EventDetails({route, navigation}) {
         <View style={styles.wishlistContainer}>
           <TouchableOpacity
             style={styles.wishList}
-            onPress={() => addToWishlist(item.key)}>
+            onPress={() => addToWishlist(item.key, qty)}>
             <Text style={styles.wishlistText}>Add to Wishlist</Text>
           </TouchableOpacity>
         </View>
@@ -179,6 +187,24 @@ export default function EventDetails({route, navigation}) {
             {convertToRupiah(item.price)} / Ticket
           </Text>
         </View>
+
+        {onWishlist ? (
+          <View style={styles.cardContainer}>
+            <Text style={styles.cardTitle}>Quantity</Text>
+            <Text style={styles.textStyle}>{qty}</Text>
+          </View>
+        ) : (
+          <View style={styles.cardContainer}>
+            <Text style={styles.cardTitle}>Quantity</Text>
+            <TextInput
+              placeholder="Qty"
+              keyboardType="number-pad"
+              onChangeText={text => setQty(text)}
+              style={styles.form}
+              value={qty}
+            />
+          </View>
+        )}
 
         {/* idk bt this */}
         <WishlistButton />
@@ -256,5 +282,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     paddingBottom: 15,
     width: '100%',
+  },
+  form: {
+    backgroundColor: 'white',
+    margin: 10,
+    paddingHorizontal: 15,
+    borderRadius: 5,
+    borderColor: '#bbb',
+    borderWidth: 1,
   },
 });

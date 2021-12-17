@@ -26,7 +26,7 @@ export default function Events(props) {
         .get()
         .then(documentSnapshot => {
           if (documentSnapshot.exists) {
-            const userWish = documentSnapshot.data().wishlist;
+            const userWish = Object.keys(documentSnapshot.data().wishlist);
             if (userWish.length > 0) {
               firestore()
                 .collection('events')
