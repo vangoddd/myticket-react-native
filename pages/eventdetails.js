@@ -57,12 +57,12 @@ export default function EventDetails({route, navigation}) {
   const confirmationAlert = () => {
     Alert.alert('Delete', 'Are you sure you want to delete this event?', [
       {
-        text: 'Cancel',
+        text: 'No',
         onPress: () => {},
         style: 'cancel',
       },
       {
-        text: 'Submit',
+        text: 'Yes',
         onPress: () => {
           handleDeleteEvent();
         },
@@ -182,23 +182,6 @@ export default function EventDetails({route, navigation}) {
 
         {/* idk bt this */}
         <WishlistButton />
-        {/* {!onWishlist && !route.params.admin ? (
-          <View style={styles.wishlistContainer}>
-            <TouchableOpacity
-              style={styles.wishList}
-              onPress={() => addToWishlist(item.key)}>
-              <Text style={styles.wishlistText}>Add to Wishlist</Text>
-            </TouchableOpacity>
-          </View>
-        ) : (
-          <View style={styles.wishlistContainer}>
-            <TouchableOpacity
-              style={styles.wishListRemove}
-              onPress={() => removeFromWishlist(item.key)}>
-              <Text style={styles.wishlistText}>Remove from wishlist</Text>
-            </TouchableOpacity>
-          </View>
-        )} */}
       </View>
     </ScrollView>
   );
